@@ -7,7 +7,7 @@ from flask_cors import CORS  # 다른 도메인에서 접근할 수 있도록 CO
 app = Flask(__name__)  # Flask 앱 인스턴스 생성
 CORS(app)  # 프론트엔드와 연동 시 CORS 문제 방지
 
-GOOGLE_API_KEY = 'AIzaSyAeF2-nGf-I1JyDrCBMZfaQBmCyRPswAZo'  # Google Maps API 호출 시 필요한 인증 키
+GOOGLE_API_KEY = 'your_API_Key'  # Google Maps API 호출 시 필요한 인증 키
 
 # json 파일 열기
 with open('schedule.json', 'r') as f:
