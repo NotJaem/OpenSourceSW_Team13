@@ -1,5 +1,5 @@
 # 1) 파이썬 가상환경
-venv/
+backend/venv/
 .venv/
 
 # 2) 바이트 코드, 캐시 파일
