@@ -1,0 +1,19 @@
+# 1) 파이썬 가상환경
+venv/
+.venv/
+
+# 2) 바이트 코드, 캐시 파일
+__pycache__/
+*.py[cod]
+
+# 3) 환경변수 파일 (API 키, 비밀번호 등)
+.env
+
+# 4) IDE/에디터 설정
+.vscode/
+.idea/
+
+# 5) OS별 불필요 파일
+.DS_Store      # macOS
+Thumbs.db      # Windows
+*~             # Linux 편집기 백업
