@@ -7,13 +7,16 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'API_Client_ID'  # <-- 여기에 본인의 NAVER API Client ID 입력
-NAVER_CLIENT_SECRET = 'API_Client_Secret'  # <-- 여기에 본인의 NAVER API Client Secret 입력
+NAVER_CLIENT_ID = 'API_Client_ID'  # <-- NAVER API Client ID 입력
+NAVER_CLIENT_SECRET = 'API_Client_Secret'  # <-- NAVER API Client Secret 입력
 
-# 지명 기반 기본 설정
-ORIGIN_NAME = "경기 용인시 수지구 죽전로 152"
-DESTINATION_NAME = "경기 용인시 수지구 포은대로 536"
-WAYPOINT_NAME_LIST = ["경기 용인시 기흥구 죽전로 3 "]
+# 도로명 주소 기반 지명
+ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
+DESTINATION_NAME = "경기도 용인시 수지구 포은대로 536"
+WAYPOINT_NAME_LIST = [
+    "경기도 용인시 수지구 죽전동 1442",
+    "경기도 용인시 기흥구 보정동 1353"    
+]
 
 # JSON 시간 데이터를 datetime 객체 리스트로 변환
 with open('schedule.json', 'r') as f:
@@ -91,8 +94,20 @@ def predict_arrival():
                 if not start_loc or not end_loc:
                     raise Exception('위치 정보가 없습니다.')
 
-                lat = start_loc[1] + (end_loc[1] - start_loc[1]) * progress
-                lng = start_loc[0] + (end_loc[0] - start_loc[0]) * progress
+                path = route.get('path')
+                if not path or len(path) < 2:
+                    raise Exception('경로 정보(path)가 부족합니다.')
+
+                index_float = progress * (len(path) - 1)
+                lower_index = int(index_float)
+                upper_index = min(lower_index + 1, len(path) - 1)
+                ratio = index_float - lower_index
+
+                x1, y1 = path[lower_index]
+                x2, y2 = path[upper_index]
+
+                lng = x1 + (x2 - x1) * ratio
+                lat = y1 + (y2 - y1) * ratio
 
                 remaining = (predicted_arrival - datetime.now()).total_seconds()
 
