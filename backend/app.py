@@ -7,8 +7,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'API_Client_ID'  # <-- NAVER API Client ID 입력
-NAVER_CLIENT_SECRET = 'API_Client_Secret'  # <-- NAVER API Client Secret 입력
+NAVER_CLIENT_ID = 'x32e45dhiv'  # <-- NAVER API Client ID 입력
+NAVER_CLIENT_SECRET = 'WgPseVxDKg8NYjVcxdOFmOTtIzTnf98ffnIauAYu'  # <-- NAVER API Client Secret 입력
 
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
@@ -77,7 +77,7 @@ def predict_arrival():
                 travel_time_sec, route = get_travel_duration_and_route(origin, destination, waypoints)
                 predicted_arrival = dep + timedelta(seconds=travel_time_sec)
 
-                elapsed = (datetime.now() - dep).total_seconds()
+                elapsed = (arrival_time - dep).total_seconds()
                 progress = min(max(elapsed / travel_time_sec, 0), 1.0)
 
                 summary = route.get('summary')
@@ -109,7 +109,7 @@ def predict_arrival():
                 lng = x1 + (x2 - x1) * ratio
                 lat = y1 + (y2 - y1) * ratio
 
-                remaining = (predicted_arrival - datetime.now()).total_seconds()
+                remaining = (predicted_arrival - arrival_time).total_seconds()
 
                 results.append({
                     'departure_time': dep.strftime('%H:%M'),
