@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>셔틀 ETA 예측</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{url_for('static', filename='jquery-2.2.2.min.js')}}"></script>
+    <script src="{{url_for('static', filename='leaflet/leaflet.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='leaflet/leaflet.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='demo.css')}}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
 </head>
 <body>
-  <h1>죽전역 셔틀 도착 예측</h1>
-
-  <label>도착 시각 (HH:mm):
-    <input type="time" id="arrival-time" required>
-  </label>
-  <button id="predict-btn">예측 요청</button>
-
-  <div id="map"></div>
-
-  <div id="info">
-    <p>예상 도착 시각: <span id="arrival"></span></p>
-    <div class="progress-bar-container">
-      <div id="progress-bar"></div>
+    <h1>Flask + Leaflet</h1>
+    <div id="llmap"></div>
+    <div>
+        <select id="distsel">
+          {% for district in districts %}
+          <option value="{{district.id}}">{{district.name}}</option>
+          {% endfor %}
+        </select>
     </div>
-    <p id="eta-text"></p>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="{{url_for('static', filename='demo.js')}}"></script>
 </body>
-</html>

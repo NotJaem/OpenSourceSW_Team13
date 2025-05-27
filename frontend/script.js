@@ -1,58 +1,31 @@
-// 지도 초기화
-const map = L.map('map').setView([37.322, 127.125], 14); //학교
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19
-}).addTo(map);
+BASECOORDS = [-13.9626, 33.7741];
 
-let marker = null;
+function makeMap() {
+    var TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    var MB_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    mymap = L.map('llmap').setView(BASECOORDS, 8);
+    L.tileLayer(TILE_URL, {attribution: MB_ATTR}).addTo(mymap);
+}
 
-document.getElementById('predict-btn').addEventListener('click', () => {
-  const arrivalTime = document.getElementById('arrival-time').value;
-  if (!arrivalTime) {
-    alert('도착 시각을 입력하세요!');
-    return;
-  }
+var layer = L.layerGroup();
 
-  fetch('http://127.0.0.1:5001/predict-arrival', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ arrival_time: arrivalTime })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log(data);
-    if (data.status !== 'ok') {
-      alert(data.message || '예측 실패');
-      return;
-    }
+function renderData(districtid) {
+    $.getJSON("/district/" + districtid, function(obj) {
+        var markers = obj.data.map(function(arr) {
+            return L.marker([arr[0], arr[1]]);
+        });
+        mymap.removeLayer(layer);
+        layer = L.layerGroup(markers);
+        mymap.addLayer(layer);
+    });
+}
 
-    // 최신 결과
-    const latest = data.candidates[data.candidates.length - 1];
-    if (latest.status !== 'ok') {
-      alert(latest.message || '예측 실패');
-      return;
-    }
 
-    // 지도에 마커
-    const { lat, lng } = latest.current_location;
-    if (marker) {
-      marker.setLatLng([lat, lng]);
-    } else {
-      marker = L.marker([lat, lng]).addTo(map);
-    }
-    map.setView([lat, lng], 15);
-
-    // 예상 도착 시각
-    document.getElementById('arrival').innerText = latest.predicted_arrival;
-
-    // 진행률
-    document.getElementById('progress-bar').style.width = `${latest.progress}%`;
-
-    // 남은 시간
-    document.getElementById('eta-text').innerText = `약 ${latest.eta_minutes}분 남았습니다.`;
-  })
-  .catch(err => {
-    console.error(err);
-    alert('서버 요청 실패');
-  });
-});
+$(function() {
+    makeMap();
+    renderData('0');
+    $('#distsel').change(function() {
+        var val = $('#distsel option:selected').val();
+        renderData(val);
+    });
+})
