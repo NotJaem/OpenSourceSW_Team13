@@ -10,6 +10,7 @@ CORS(app)
 NAVER_CLIENT_ID = 'API_Client_ID'  # <-- NAVER API Client ID 입력
 NAVER_CLIENT_SECRET = 'API_Client_Secret'  # <-- NAVER API Client Secret 입력
 
+
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
 DESTINATION_NAME = "경기도 용인시 수지구 포은대로 536"
@@ -77,7 +78,7 @@ def predict_arrival():
                 travel_time_sec, route = get_travel_duration_and_route(origin, destination, waypoints)
                 predicted_arrival = dep + timedelta(seconds=travel_time_sec)
 
-                elapsed = (datetime.now() - dep).total_seconds()
+                elapsed = (arrival_time - dep).total_seconds()
                 progress = min(max(elapsed / travel_time_sec, 0), 1.0)
 
                 summary = route.get('summary')
@@ -88,6 +89,27 @@ def predict_arrival():
                 goal = summary.get('goal')
                 if not start or not goal:
                     raise Exception('출발지 또는 도착지 정보가 없습니다.')
+
+                    
+                start_loc = start.get('location')
+                end_loc = goal.get('location')
+                if not start_loc or not end_loc:
+                    raise Exception('위치 정보가 없습니다.')
+
+                path = route.get('path')
+                if not path or len(path) < 2:
+                    raise Exception('경로 정보(path)가 부족합니다.')
+
+                index_float = progress * (len(path) - 1)
+                lower_index = int(index_float)
+                upper_index = min(lower_index + 1, len(path) - 1)
+                ratio = index_float - lower_index
+
+                x1, y1 = path[lower_index]
+                x2, y2 = path[upper_index]
+
+                lng = x1 + (x2 - x1) * ratio
+                lat = y1 + (y2 - y1) * ratio
 
                 start_loc = start.get('location')
                 end_loc = goal.get('location')
@@ -109,7 +131,7 @@ def predict_arrival():
                 lng = x1 + (x2 - x1) * ratio
                 lat = y1 + (y2 - y1) * ratio
 
-                remaining = (predicted_arrival - datetime.now()).total_seconds()
+                remaining = (predicted_arrival - arrival_time).total_seconds()
 
                 results.append({
                     'departure_time': dep.strftime('%H:%M'),
@@ -157,3 +179,4 @@ def get_travel_duration_and_route(origin, destination, waypoints):
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, port=5001)
+

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>셔틀 ETA 예측</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+  <h1>죽전역 셔틀 도착 예측</h1>
+
+  <label>도착 시각 (HH:mm):
+    <input type="time" id="arrival-time" required>
+  </label>
+  <button id="predict-btn">예측 요청</button>
+
+  <div id="map"></div>
+
+  <div id="info">
+    <p>예상 도착 시각: <span id="arrival"></span></p>
+    <div class="progress-bar-container">
+      <div id="progress-bar"></div>
+    </div>
+    <p id="eta-text"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

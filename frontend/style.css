@@ -1,0 +1,30 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 300px;
+  margin: 20px auto;
+  width: 80%;
+}
+
+#info {
+  margin-top: 20px;
+}
+
+.progress-bar-container {
+  width: 80%;
+  margin: 10px auto;
+  background-color: #ddd;
+  border-radius: 20px;
+}
+
+#progress-bar {
+  height: 20px;
+  background-color: #4CAF50;
+  width: 0%;
+  border-radius: 20px;
+}
