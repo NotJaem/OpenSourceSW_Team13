@@ -27,7 +27,7 @@ document.getElementById('predict-btn').addEventListener('click', () => {
     }
 
     // 최신 결과
-    const latest = data.candidates[data.candidates.length - 1];
+    const latest = data.result;
     if (latest.status !== 'ok') {
       alert(latest.message || '예측 실패');
       return;
