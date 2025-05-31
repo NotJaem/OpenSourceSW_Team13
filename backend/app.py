@@ -100,6 +100,27 @@ def predict_arrival():
                 if not start or not goal:
                     raise Exception('출발지 또는 도착지 정보가 없습니다.')
 
+                    
+                start_loc = start.get('location')
+                end_loc = goal.get('location')
+                if not start_loc or not end_loc:
+                    raise Exception('위치 정보가 없습니다.')
+
+                path = route.get('path')
+                if not path or len(path) < 2:
+                    raise Exception('경로 정보(path)가 부족합니다.')
+
+                index_float = progress * (len(path) - 1)
+                lower_index = int(index_float)
+                upper_index = min(lower_index + 1, len(path) - 1)
+                ratio = index_float - lower_index
+
+                x1, y1 = path[lower_index]
+                x2, y2 = path[upper_index]
+
+                lng = x1 + (x2 - x1) * ratio
+                lat = y1 + (y2 - y1) * ratio
+
                 start_loc = start.get('location')
                 end_loc = goal.get('location')
                 if not start_loc or not end_loc:
@@ -170,3 +191,4 @@ def get_travel_duration_and_route(origin, destination, waypoints):
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, port=5001)
+
