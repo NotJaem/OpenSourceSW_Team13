@@ -7,12 +7,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'API_Client_ID'      # <-- NAVER API Client ID 입력
-NAVER_CLIENT_SECRET = 'API_Client_Secret' \
-''  # <-- NAVER API Client Secret 입력
+NAVER_CLIENT_ID = 'API_Client_ID'      
+NAVER_CLIENT_SECRET = 'API_Client_Secret'
 
-
-# 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
 DESTINATION_NAME = "경기도 용인시 수지구 포은대로 536"
 WAYPOINT_NAME_LIST = [
@@ -20,7 +17,6 @@ WAYPOINT_NAME_LIST = [
     "경기도 용인시 기흥구 보정동 1353"
 ]
 
-# JSON 시간 데이터를 datetime 객체 리스트로 변환
 with open('schedule.json', 'r') as f:
     raw_schedule = json.load(f)
     now = datetime.now()
@@ -60,7 +56,6 @@ def predict_arrival():
         user_input = request.get_json()
         arrival_str = user_input.get('arrival_time')
 
-        # dev 코드에서는 arrival_time을 문자열 → datetime으로 변환 후 날짜를 오늘 기준으로 치환
         arrival_time = datetime.strptime(arrival_str, '%H:%M')
         now = datetime.now()
         arrival_time = arrival_time.replace(year=now.year, month=now.month, day=now.day)
@@ -69,7 +64,6 @@ def predict_arrival():
         destination = DESTINATION
         waypoints = DEFAULT_WAYPOINTS
 
-        # 출발 후보(과거 2개 + 미래 1개) 선택
         candidate_departures = [t for t in SCHEDULE if t <= arrival_time]
         if not candidate_departures:
             return jsonify({'status': 'no_bus', 'message': '해당 시간 이전 출발 셔틀이 없습니다.'})
@@ -81,34 +75,24 @@ def predict_arrival():
         results = []
         for dep in selected_candidates:
             try:
-                # 이동 시간(sec)과 경로(route) 얻어오기
                 travel_time_sec, route = get_travel_duration_and_route(origin, destination, waypoints)
                 predicted_arrival = dep + timedelta(seconds=travel_time_sec)
 
-                # ─────── doyun의 첫 번째 필터: predicted_arrival이 arrival_time보다 작거나 같으면 건너뜀 ───────
                 if predicted_arrival <= arrival_time:
-                    # 셔틀이 이미 입력 도착 시간 이전에 도착하는 경우 제외
                     continue
-                # ────────────────────────────────────────────────────────────────────────────────────────────────
 
-                # 경과 시간, 진행률(progress), ETA 계산 (do yun 로직)
                 elapsed = (arrival_time - dep).total_seconds()
                 progress = min(max(elapsed / travel_time_sec, 0), 1.0)
 
                 remaining_sec = (predicted_arrival - arrival_time).total_seconds()
                 eta_minutes = remaining_sec / 60.0
 
-                # ─────── doyun의 두 번째 필터: progress == 0이면 (아직 출발 전) 건너뜀 ───────
                 if progress == 0:
                     continue
-                # ─────────────────────────────────────────────────────────────────
 
-                # ─────── doyun의 세 번째 필터: progress == 1.0 이면서 ETA < -2분이면 건너뜀 ───────
                 if progress == 1.0 and eta_minutes < -2:
                     continue
-                # ─────────────────────────────────────────────────────────────────────────────────
 
-                # ─────── dev 코드 이어서 ───────
                 summary = route.get('summary')
                 if not summary:
                     raise Exception('요약 정보가 없습니다.')
@@ -127,7 +111,6 @@ def predict_arrival():
                 if not path or len(path) < 2:
                     raise Exception('경로 정보(path)가 부족합니다.')
 
-                # interpolate(보간) 계산
                 index_float = progress * (len(path) - 1)
                 lower_index = int(index_float)
                 upper_index = min(lower_index + 1, len(path) - 1)
@@ -182,8 +165,7 @@ def get_travel_duration_and_route(origin, destination, waypoints):
         raise Exception('NAVER API 호출 실패: ' + data.get('message', '') + ' / 응답 전문: ' + json.dumps(data))
 
     route = data['route']['trafast'][0]
-    duration = route['summary']['duration'] / 1000  # ms to sec
-
+    duration = route['summary']['duration'] / 1000
     return duration, route
 
 
