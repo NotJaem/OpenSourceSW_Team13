@@ -7,18 +7,18 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'API_Client_ID'  # <-- NAVER API Client ID 입력
-NAVER_CLIENT_SECRET = 'API_Client_Secret'  # <-- NAVER API Client Secret 입력
+NAVER_CLIENT_ID = 'Your_API_Key'  # <-- NAVER API Client ID 입력
+NAVER_CLIENT_SECRET = 'Your_API_Key'  # <-- NAVER API Client Secret 입력
 
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
 DESTINATION_NAME = "경기도 용인시 수지구 포은대로 536"
 WAYPOINT_NAME_LIST = [
     "경기도 용인시 수지구 죽전동 1442",
-    "경기도 용인시 기흥구 보정동 1353"    
+    "경기도 용인시 기흥구 보정동 1353"
 ]
 
-# JSON 시간 데이터를 datetime 객체 리스트로 변환
+# JSON 시간 데이터를 datetime 리스트로 변환
 with open('schedule.json', 'r') as f:
     raw_schedule = json.load(f)
     now = datetime.now()
@@ -26,6 +26,7 @@ with open('schedule.json', 'r') as f:
         datetime.strptime(t, '%H:%M').replace(year=now.year, month=now.month, day=now.day)
         for t in raw_schedule
     ])
+
 
 def get_coordinates_from_name(place_name):
     url = 'https://maps.apigw.ntruss.com/map-geocode/v2/geocode'
@@ -41,6 +42,7 @@ def get_coordinates_from_name(place_name):
     addr = data['addresses'][0]
     return f"{addr['x']},{addr['y']}"
 
+
 try:
     ORIGIN = get_coordinates_from_name(ORIGIN_NAME)
     DESTINATION = get_coordinates_from_name(DESTINATION_NAME)
@@ -49,54 +51,50 @@ except Exception as e:
     print("지오코딩 실패:", e)
     exit(1)
 
+
 @app.route('/predict-arrival', methods=['POST'])
 def predict_arrival():
     try:
         user_input = request.get_json()
         arrival_str = user_input.get('arrival_time')
-
-        origin = ORIGIN
-        destination = DESTINATION
-        waypoints = DEFAULT_WAYPOINTS
-
-        arrival_time = datetime.strptime(arrival_str, '%H:%M')
-        now = datetime.now()
-        arrival_time = arrival_time.replace(year=now.year, month=now.month, day=now.day)
+        arrival_time = datetime.strptime(arrival_str, '%H:%M').replace(
+            year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
 
         candidate_departures = [t for t in SCHEDULE if t <= arrival_time]
-        if not candidate_departures:
-            return jsonify({'status': 'no_bus', 'message': '해당 시간 이전 출발 셔틀이 없습니다.'})
-
         past_two = candidate_departures[-2:] if len(candidate_departures) >= 2 else candidate_departures
         future_one = [t for t in SCHEDULE if t > arrival_time][:1]
         selected_candidates = past_two + future_one
 
-        results = []
+        if not selected_candidates:
+            return jsonify({'status': 'no_bus', 'message': '후보 셔틀이 없습니다.'})
+
+        valid_results = [] 
+
         for dep in selected_candidates:
             try:
-                travel_time_sec, route = get_travel_duration_and_route(origin, destination, waypoints)
+                travel_time_sec, route = get_travel_duration_and_route(
+                    ORIGIN, DESTINATION, DEFAULT_WAYPOINTS
+                )
                 predicted_arrival = dep + timedelta(seconds=travel_time_sec)
 
-                elapsed = (datetime.now() - dep).total_seconds()
+                if predicted_arrival <= arrival_time:
+                    continue
+
+                elapsed = (arrival_time - dep).total_seconds()
                 progress = min(max(elapsed / travel_time_sec, 0), 1.0)
 
-                summary = route.get('summary')
-                if not summary:
-                    raise Exception('요약 정보가 없습니다.')
+                remaining_sec = (predicted_arrival - arrival_time).total_seconds()
+                eta_minutes = remaining_sec / 60.0
 
-                start = summary.get('start')
-                goal = summary.get('goal')
-                if not start or not goal:
-                    raise Exception('출발지 또는 도착지 정보가 없습니다.')
+                if progress == 0:
+                    continue
 
-                start_loc = start.get('location')
-                end_loc = goal.get('location')
-                if not start_loc or not end_loc:
-                    raise Exception('위치 정보가 없습니다.')
+                if progress == 1.0 and eta_minutes < -2:
+                    continue
 
                 path = route.get('path')
                 if not path or len(path) < 2:
-                    raise Exception('경로 정보(path)가 부족합니다.')
+                    continue
 
                 index_float = progress * (len(path) - 1)
                 lower_index = int(index_float)
@@ -105,31 +103,33 @@ def predict_arrival():
 
                 x1, y1 = path[lower_index]
                 x2, y2 = path[upper_index]
-
                 lng = x1 + (x2 - x1) * ratio
                 lat = y1 + (y2 - y1) * ratio
 
-                remaining = (predicted_arrival - datetime.now()).total_seconds()
-
-                results.append({
+                result_item = {
                     'departure_time': dep.strftime('%H:%M'),
                     'predicted_arrival': predicted_arrival.strftime('%H:%M'),
-                    'eta_minutes': round(remaining / 60, 1),
+                    'eta_minutes': round(eta_minutes, 1),
                     'current_location': {'lat': lat, 'lng': lng},
-                    'progress': round(progress * 100, 1),
-                    'status': 'ok'
-                })
-            except Exception as e:
-                results.append({
-                    'departure_time': dep.strftime('%H:%M'),
-                    'status': 'error',
-                    'message': str(e)
-                })
+                    'progress': round(progress * 100, 1)
+                }
+                valid_results.append(result_item)
 
-        return jsonify({'status': 'ok', 'candidates': results})
+            except Exception as e:
+                print(f'  - dep={dep.strftime("%H:%M")} 처리 중 오류: {e}')
+                continue
+
+
+        if not valid_results:
+            return jsonify({'status': 'no_bus', 'message': '운행 가능한 셔틀이 없습니다.'})
+
+        return jsonify({'status': 'ok', 'results': valid_results})
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
+
+
+    
 
 def get_travel_duration_and_route(origin, destination, waypoints):
     url = 'https://maps.apigw.ntruss.com/map-direction/v1/driving'
@@ -151,9 +151,10 @@ def get_travel_duration_and_route(origin, destination, waypoints):
         raise Exception('NAVER API 호출 실패: ' + data.get('message', '') + ' / 응답 전문: ' + json.dumps(data))
 
     route = data['route']['trafast'][0]
-    duration = route['summary']['duration'] / 1000  # ms to sec
+    duration = route['summary']['duration'] / 1000  # ms -> sec
 
     return duration, route
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, port=5001)
