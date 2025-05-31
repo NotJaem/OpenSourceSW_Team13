@@ -7,7 +7,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'API_Client_ID'      
+NAVER_CLIENT_ID = 'API_Client_ID'
 NAVER_CLIENT_SECRET = 'API_Client_Secret'
 
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
@@ -21,10 +21,11 @@ with open('schedule.json', 'r') as f:
     raw_schedule = json.load(f)
     now = datetime.now()
     SCHEDULE = sorted([
-        datetime.strptime(t, '%H:%M').replace(year=now.year, month=now.month, day=now.day)
+        datetime.strptime(t, '%H:%M').replace(
+            year=now.year, month=now.month, day=now.day
+        )
         for t in raw_schedule
     ])
-
 
 def get_coordinates_from_name(place_name):
     url = 'https://maps.apigw.ntruss.com/map-geocode/v2/geocode'
@@ -40,7 +41,6 @@ def get_coordinates_from_name(place_name):
     addr = data['addresses'][0]
     return f"{addr['x']},{addr['y']}"
 
-
 try:
     ORIGIN = get_coordinates_from_name(ORIGIN_NAME)
     DESTINATION = get_coordinates_from_name(DESTINATION_NAME)
@@ -49,13 +49,11 @@ except Exception as e:
     print("지오코딩 실패:", e)
     exit(1)
 
-
 @app.route('/predict-arrival', methods=['POST'])
 def predict_arrival():
     try:
         user_input = request.get_json()
         arrival_str = user_input.get('arrival_time')
-
         arrival_time = datetime.strptime(arrival_str, '%H:%M')
         now = datetime.now()
         arrival_time = arrival_time.replace(year=now.year, month=now.month, day=now.day)
@@ -144,7 +142,6 @@ def predict_arrival():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
-
 def get_travel_duration_and_route(origin, destination, waypoints):
     url = 'https://maps.apigw.ntruss.com/map-direction/v1/driving'
     headers = {
@@ -162,12 +159,14 @@ def get_travel_duration_and_route(origin, destination, waypoints):
     data = response.json()
 
     if data.get('code') != 0:
-        raise Exception('NAVER API 호출 실패: ' + data.get('message', '') + ' / 응답 전문: ' + json.dumps(data))
+        raise Exception(
+            'NAVER API 호출 실패: ' + data.get('message', '') +
+            ' / 응답 전문: ' + json.dumps(data)
+        )
 
     route = data['route']['trafast'][0]
     duration = route['summary']['duration'] / 1000
     return duration, route
-
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, port=5001)
