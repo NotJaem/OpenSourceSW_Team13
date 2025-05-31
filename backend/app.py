@@ -11,6 +11,7 @@ NAVER_CLIENT_ID = 'x32e45dhiv'      # <-- NAVER API Client ID 입력
 NAVER_CLIENT_SECRET = 'WgPseVxDKg8NYjVcxdOFmOTtIzTnf98ffnIauAYu'  # <-- NAVER API Client Secret 입력
 
 
+
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
 DESTINATION_NAME = "경기도 용인시 수지구 포은대로 536"
@@ -61,6 +62,7 @@ def predict_arrival():
         arrival_time = datetime.strptime(arrival_str, '%H:%M').replace(
             year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
 
+        # 출발 후보(과거 2개 + 미래 1개) 선택
         candidate_departures = [t for t in SCHEDULE if t <= arrival_time]
         past_two = candidate_departures[-2:] if len(candidate_departures) >= 2 else candidate_departures
         future_one = [t for t in SCHEDULE if t > arrival_time][:1]
@@ -79,26 +81,32 @@ def predict_arrival():
                 predicted_arrival = dep + timedelta(seconds=travel_time_sec)
 
                 # ———— doyun 쪽 로직 유지 ————
+                # predicted_arrival이 arrival_time보다 작거나 같으면 다음 후보로
                 if predicted_arrival <= arrival_time:
                     continue
 
+                # 경과 시간, 진행률, ETA 계산
                 elapsed = (arrival_time - dep).total_seconds()
                 progress = min(max(elapsed / travel_time_sec, 0), 1.0)
 
                 remaining_sec = (predicted_arrival - arrival_time).total_seconds()
                 eta_minutes = remaining_sec / 60.0
 
+                # progress가 0인 경우 (아직 출발 전) → 제외
                 if progress == 0:
                     continue
 
+                # progress가 1.0 이면서 ETA < -2분인 경우 (이미 종점 도착 후 2분 이상 경과) → 제외
                 if progress == 1.0 and eta_minutes < -2:
                     continue
                 # ————————————————
 
+                # 경로(path) 정보 유효성 검사
                 path = route.get('path')
                 if not path or len(path) < 2:
                     continue
 
+                # 보간(interpolation)으로 현재 위치 계산
                 index_float = progress * (len(path) - 1)
                 lower_index = int(index_float)
                 upper_index = min(lower_index + 1, len(path) - 1)
@@ -109,6 +117,7 @@ def predict_arrival():
                 lng = x1 + (x2 - x1) * ratio
                 lat = y1 + (y2 - y1) * ratio
 
+                # 결과 항목 생성 및 valid_results에 추가
                 result_item = {
                     'departure_time': dep.strftime('%H:%M'),
                     'predicted_arrival': predicted_arrival.strftime('%H:%M'),
