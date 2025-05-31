@@ -7,8 +7,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'Your_API_Key'  # <-- NAVER API Client ID 입력
-NAVER_CLIENT_SECRET = 'Your_API_Key'  # <-- NAVER API Client Secret 입력
+NAVER_CLIENT_ID = 'x32e45dhiv'      # <-- NAVER API Client ID 입력
+NAVER_CLIENT_SECRET = 'WgPseVxDKg8NYjVcxdOFmOTtIzTnf98ffnIauAYu'  # <-- NAVER API Client Secret 입력
+
 
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
@@ -68,7 +69,7 @@ def predict_arrival():
         if not selected_candidates:
             return jsonify({'status': 'no_bus', 'message': '후보 셔틀이 없습니다.'})
 
-        valid_results = [] 
+        valid_results = []
 
         for dep in selected_candidates:
             try:
@@ -77,6 +78,7 @@ def predict_arrival():
                 )
                 predicted_arrival = dep + timedelta(seconds=travel_time_sec)
 
+                # ———— doyun 쪽 로직 유지 ————
                 if predicted_arrival <= arrival_time:
                     continue
 
@@ -91,6 +93,7 @@ def predict_arrival():
 
                 if progress == 1.0 and eta_minutes < -2:
                     continue
+                # ————————————————
 
                 path = route.get('path')
                 if not path or len(path) < 2:
@@ -119,17 +122,14 @@ def predict_arrival():
                 print(f'  - dep={dep.strftime("%H:%M")} 처리 중 오류: {e}')
                 continue
 
-
         if not valid_results:
             return jsonify({'status': 'no_bus', 'message': '운행 가능한 셔틀이 없습니다.'})
 
         return jsonify({'status': 'ok', 'results': valid_results})
 
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': str(e)})  
 
-
-    
 
 def get_travel_duration_and_route(origin, destination, waypoints):
     url = 'https://maps.apigw.ntruss.com/map-direction/v1/driving'
