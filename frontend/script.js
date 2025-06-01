@@ -1,5 +1,17 @@
+// 진입 버튼으로 UI 전환
+document.addEventListener('DOMContentLoaded', () => {
+  const enterBtn = document.getElementById('enter-btn');
+  if (enterBtn) {
+    enterBtn.addEventListener('click', () => {
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('main-ui').style.display = 'block';
+      setTimeout(() => map.invalidateSize(), 100); // 지도 재정렬
+    });
+  }
+});
+
 // 지도 초기화
-const map = L.map('map').setView([37.322, 127.125], 14); //학교
+const map = L.map('map').setView([37.322, 127.125], 1); //학교
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19
 }).addTo(map);
@@ -27,7 +39,7 @@ document.getElementById('predict-btn').addEventListener('click', () => {
     }
 
     // 최신 결과
-    const latest = data.candidates[data.candidates.length - 1];
+    const latest = data.result;
     if (latest.status !== 'ok') {
       alert(latest.message || '예측 실패');
       return;
