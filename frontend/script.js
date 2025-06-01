@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 지도 초기화
-const map = L.map('map').setView([37.322, 127.125], 1); //학교
+const map = L.map('map').setView([37.322, 127.125], 14); //학교
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19
 }).addTo(map);

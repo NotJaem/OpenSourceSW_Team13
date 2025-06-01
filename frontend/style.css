@@ -6,9 +6,9 @@ body {
 }
 
 #map {
-  height: 300px;
+  height: 350px;
   margin: 20px auto;
-  width: 80%;
+  width: 50%;
 }
 
 #info {
@@ -16,15 +16,15 @@ body {
 }
 
 .progress-bar-container {
-  width: 80%;
+  width: 25%;
   margin: 10px auto;
   background-color: #ddd;
   border-radius: 20px;
 }
 
 #progress-bar {
-  height: 20px;
-  background-color: #4CAF50;
+  height: 10px;
+  background: linear-gradient(to right, #a8ff78 0%, #78ffd6 100%);
   width: 0%;
   border-radius: 20px;
 }
