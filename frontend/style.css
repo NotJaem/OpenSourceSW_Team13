@@ -1,8 +1,225 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+               system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+               'Noto Sans KR', 'Malgun Gothic', sans-serif;
   text-align: center;
   margin: 0;
   padding: 0;
+  background: #F2F2F2;
+  color: #222;
+  overflow: hidden;
+}
+
+landing {
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#landing {
+  position: relative;
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.landing-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+
+.landing-left {
+  text-align: left;
+  flex: 1;
+  
+  margin-top: -50px;
+}
+
+.landing-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+
+
+
+
+#landing h1 {
+  display: inline-block;
+  font-size: 200px;
+  margin-bottom: 0px;
+  margin-top: -10px;
+  color: #177DFA;
+}
+
+#landing h2 {
+  font-size: 28px;
+  margin-top: -30px;
+  margin-bottom: -15px;
+  color: #34495e;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #0D0D0D; /* 원하는 색상으로 수정 가능 */
+}
+
+#landing p {
+  font-size: 20px;
+  margin: 5px;
+  color: #595959;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 500; /* ⬅ Pretendard Medium에 해당 */
+}
+
+button {
+  padding: 12px 30px;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 25px 0;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
+  background-color: #187DFA;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+button:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  background-color: #0f5fcc;
+}
+
+button:active {
+  background-color: #0d4bb3;
+}
+
+#landing input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  width: 300px;
+  margin-top: 10px;
+}
+
+#time-setting {
+  padding: 50px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-container {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  align-items: stretch;
+  
+  position: relative; /* ✅ transform 쓰기 위해 필요 */
+  transform: translate(60px, -20px);
+}
+
+.time-left {
+  flex: none;
+  width: 360px; /* ✅ 고정 너비로 줄이기 */
+  padding: 30px;
+  text-align: left;
+
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.time-left h2 {
+  font-size: 40px;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.time-left p {
+  font-size: 18px;
+  color: #000000;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+#arrival-time-picker {
+  padding: 10px;
+  font-size: 18px;
+  width: 200px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+#time-confirm-btn {
+  display: block;
+  padding: 10px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #187DFA;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.time-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-time-picker {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.custom-time-picker select {
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-family: 'Pretendard Variable', sans-serif;
+}
+
+.shared-logo {
+  position: absolute;
+  top: 50%;
+  right: 5%; /* 또는 10% */
+  width: 500px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: translateY(-250px) translateX(-130px);
+}
+
+.footer-msg {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 500;
+  color: #747474;
+  text-align: center;
+  background-color: #F2F2F2;  /* ✅ 배경 고정 */
+  padding: 5px 10px; 
 }
 
 #map {
@@ -23,8 +240,29 @@ body {
 }
 
 #progress-bar {
-  height: 10px;
+  height: 8px;
   background: linear-gradient(to right, #a8ff78 0%, #78ffd6 100%);
   width: 0%;
   border-radius: 20px;
+}
+
+#arrival-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#arrival-label {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+#arrival-time-box {
+  display: inline-block;
+  background-color: #187DFA;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 5px;
 }
