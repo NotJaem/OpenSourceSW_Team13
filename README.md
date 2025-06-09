@@ -25,12 +25,12 @@
 
 2. **시각화 제공**
 
-   * `"셔틀 동안까지 7분 남음"`, `"동안률 80%"` 등 텍스트 및 그래프 표시
+   * `"예상 도착 시간: 7분"`, `"80%"` 등 텍스트 및 그래프 표시
    * 지도상 현재 예산 위치 표시 (Leaflet Marker)
 
-3. **사용자 인터피스**
+3. **사용자 인터페이스**
 
-   * 시간 기능에 필요한 간개한 UI
+   * 시간 기능에 필요한 간단한 UI
    * 웹 브라우저 기본 구조
 
 ---
@@ -41,7 +41,7 @@
 | ----- | -- | -------------------------------- | --------------- |
 | 프론트엔드 | 재민 | HTML, CSS, JS, Leaflet, Chart.js | 지도 시각화, 동안률 그래프 |
 | 백어드   | 도윤 | Python, Flask                    | ETA 계산, API 서버  |
-| 문서/관리 | 현구 | GitHub, 문서화                      | 기획서, README 관리  |
+| 문서/관리 | 현구 | GitHub, 문서화, 전체코드                   | 기획서, README 관리  |
 
 ---
 
@@ -55,25 +55,23 @@
 
 ---
 
-## ⏱️ 개발 용선순위
+## ⏱️ 개발 순위
 
-1. ✅ **교내 출발 시간표 CSV 형식으로 변환**
+1. ✅ **교내 출발 시간표 .json 파일로 변환**
 2. ✅ **죽전역 ↔ 학교 거리 기준 평균 속도 계산**
 
-   * 간이 버전: 시간별 평균 속도 CSV 기록
-   * 심험 버전: Directions API 또는 거리-시간 프로경 검색
-3. ✅ **Flask + Leaflet 연동 예제 실행**
+   * 간단 버전: 시간별 평균 속도 CSV 기록
+   * 심화 버전: Directions API 또는 거리-시간 검색
+3. ✅ **Flask + Leaflet 연동**
 4. ✅ **프론트엔드에서 Flask API 호출 및 ETA 표시**
 
 ---
 
-## 🔗 활용 가능 오픈소스
+## 🔗 활용 오픈소스
 
 | 이름                      | 기능                       | 링크                                                              |
 | ----------------------- | ------------------------ | --------------------------------------------------------------- |
 | Flask-Leaflet Demo      | Flask + Leaflet 연동 구조 참고 | [GitHub](https://github.com/adwhit/flask-leaflet-demo)          |
-| Flask-GoogleMaps        | Flask 내에서 Google Maps 활용 | [GitHub](https://github.com/flask-extensions/Flask-GoogleMaps)  |
-| Leaflet Routing Machine | 경로 및 정류장 시각화             | [GitHub](https://github.com/perliedman/leaflet-routing-machine) |
 
 ---
 
