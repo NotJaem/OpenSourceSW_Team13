@@ -7,9 +7,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# NAVER API 인증 정보 (실제 값으로 변경하세요)
-NAVER_CLIENT_ID = "Your_Api_Key"
-NAVER_CLIENT_SECRET = "Your_Api_Key"
+
+NAVER_CLIENT_ID = 'API_Client_ID' 
+NAVER_CLIENT_SECRET = 'API_Client_Secret'
 
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
@@ -19,7 +19,7 @@ WAYPOINT_NAME_LIST = [
     "경기도 용인시 기흥구 보정동 1353"
 ]
 
-# JSON 시간 데이터를 datetime 리스트로 변환
+
 with open('schedule.json', 'r', encoding='utf-8') as f:
     raw_schedule = json.load(f)
     now = datetime.now()
@@ -27,6 +27,7 @@ with open('schedule.json', 'r', encoding='utf-8') as f:
         datetime.strptime(t, '%H:%M').replace(year=now.year, month=now.month, day=now.day)
         for t in raw_schedule
     ])
+
 
 def get_coordinates_from_name(place_name):
     url = 'https://maps.apigw.ntruss.com/map-geocode/v2/geocode'
@@ -42,6 +43,7 @@ def get_coordinates_from_name(place_name):
         raise ValueError(f'지명 "{place_name}"에 대한 좌표를 찾을 수 없습니다.')
     addr = data['addresses'][0]
     return f"{addr['x']},{addr['y']}"
+
 
 def get_travel_duration_and_route(origin, destination, waypoints):
     url = 'https://maps.apigw.ntruss.com/map-direction/v1/driving'
@@ -90,6 +92,7 @@ try:
 except Exception as e:
     app.logger.error('지오코딩 실패: %s', e)
     raise
+
 
 @app.route('/predict-arrival', methods=['POST'])
 def predict_arrival():
@@ -171,3 +174,4 @@ def predict_arrival():
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, port=5001)
+

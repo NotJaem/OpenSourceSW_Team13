@@ -301,6 +301,7 @@ button:active {
   background: linear-gradient(to right, #a8ff78 0%, #78ffd6 100%);
   width: 0%;
   border-radius: 20px;
+
 }
 
 #bus-icon {
@@ -345,3 +346,4 @@ footer {
   text-align: center;
   padding: 5px 10px;
 }
+
