@@ -8,8 +8,8 @@ app = Flask(__name__)
 CORS(app)
 
 # NAVER API 인증 정보 (실제 값으로 변경하세요)
-NAVER_CLIENT_ID = "x32e45dhiv"
-NAVER_CLIENT_SECRET = "WgPseVxDKg8NYjVcxdOFmOTtIzTnf98ffnIauAYu"
+NAVER_CLIENT_ID = "Your_Api_Key"
+NAVER_CLIENT_SECRET = "Your_Api_Key"
 
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"
