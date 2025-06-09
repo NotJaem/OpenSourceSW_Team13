@@ -52,6 +52,33 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+const retryBtn = document.getElementById('retry-btn');
+if (retryBtn) {
+  retryBtn.addEventListener('click', () => {
+    history.pushState({ page: 'time-setting' }, '', '');
+    document.getElementById('main-ui').style.display = 'none';
+    document.getElementById('time-setting').style.display = 'flex';
+
+    // 지도 초기화
+    if (marker) {
+      map.removeLayer(marker);
+      marker = null;
+    }
+    if (routePolyline) {
+      map.removeLayer(routePolyline);
+      routePolyline = null;
+    }
+
+    // UI 초기화
+    document.getElementById('arrival-time-box').innerText = '--:--';
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('progress-percent').innerText = '0%';
+    document.getElementById('progress-percent').style.left = 'calc(0% - 12px)';
+    document.getElementById('bus-icon').style.left = 'calc(0% - 12px)';
+    document.getElementById('eta-text').innerText = '';
+  });
+}
+
 // leaflet 지도 초기화
 const map = L.map('map').setView([37.322, 127.125], 14);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
