@@ -1,98 +1,139 @@
-# 🚌 셔틀버스 ETA 예측 시스템 (ShuttleRun)
+# 🚌 ShuttleRun: 단국대 셔틀버스 ETA 예측 시스템
 
-## 👥 팀소개
-
-* **팀원**:
-
-  * **안재민** : 팀장
-  * **언도윤** : 팀원
-  * **지현구** : 팀원
-
-## ✅ 프로젝트 개요
-
-* **팀명**: 13조
-* **인원**: 3명
-* **운영 시간**: 10:30 ~ 20:40 (21:00 버스는 학교 → 죽전역까지)
+단국대학교에서 운행하는 셔틀버스는 출발 시간만 정해져 있고, 도착 시간은 실시간 교통 상황에 따라 달라집니다.  
+ShuttleRun은 사용자가 원하는 도착 시간을 입력하면, 실시간 교통 정보를 기반으로 셔틀버스의 예상 위치와 도착까지 남은 시간을 시각적으로 제공합니다.
 
 ---
 
-## 🌟 기능
+## 🔍 주요 기능
 
-1. **셔틀 동안 시간 예측 (ETA)**
-
-   * 교내 출발 시간표 + 거리/속도 기반 예측 알고리즘
-   * 평균 속도 기능 간이 목록 또는 Google Directions API 활용
-
-2. **시각화 제공**
-
-   * `"예상 도착 시간: 7분"`, `"80%"` 등 텍스트 및 그래프 표시
-   * 지도상 현재 예산 위치 표시 (Leaflet Marker)
-
-3. **사용자 인터페이스**
-
-   * 시간 기능에 필요한 간단한 UI
-   * 웹 브라우저 기본 구조
+1. **도착 시간 기반 셔틀 위치 예측**
+   - 사용자가 도착하고자 하는 시간을 입력하면, 해당 시간에 셔틀버스가 어디쯤에 있을지를 예측합니다.
+2. **실시간 교통 정보 활용**
+   - NAVER Directions5 API와 Geocode API를 활용하여 실시간 교통 상황을 반영한 경로 및 소요 시간을 계산합니다.
+3. **시각적 정보 제공**
+   - 예상 도착 시간까지 남은 시간을 텍스트로 표시하고, 지도상에 셔틀버스의 예상 위치를 마커로 표시합니다.
 
 ---
 
-## 🛠️ 기술 스택 및 역할 분담
+## 🖥️ 데모 화면
 
-| 역할    | 이름 | 기술                               | 비고              |
-| ----- | -- | -------------------------------- | --------------- |
-| 프론트엔드 | 재민 | HTML, CSS, JS, Leaflet, Chart.js | 지도 시각화, 동안률 그래프 |
-| 백어드   | 도윤 | Python, Flask                    | ETA 계산, API 서버  |
-| 문서/관리 | 현구 | GitHub, 문서화, 전체코드                   | 기획서, README 관리  |
+> 아래는 ShuttleRun의 주요 화면 예시입니다.
 
----
+![셔틀 찾기 버튼](./doc/images/shuttle_button.png)  
+*사용자가 "셔틀 찾기" 버튼을 클릭하여 도착 시간을 설정하는 화면*
 
-## 🧐 주요 기술 요소
+![도착 시간 설정](./doc/images/set_arrival_time.png)  
+*사용자가 도착 시간을 입력하는 화면*
 
-* **📍 지도 시각화**: OpenStreetMap + Leaflet.js
-* **🧮 ETA 예측**: 평균 거리/속도 기반 예측 또는 Directions API
-* **🌐 API 서버**: Flask 기능 /eta 역할
-* **📊 시각화**: Chart.js or HTML Progress Bar
-* **📂 교내 시간표 DB**: CSV 또는 JSON 바로 활용
+![예상 위치 및 시간 표시](./doc/images/estimated_location.png)  
+*예상 셔틀버스 위치와 도착까지 남은 시간을 지도와 함께 표시하는 화면*
 
 ---
 
-## ⏱️ 개발 순위
+## ⚙️ 기술 스택
 
-1. ✅ **교내 출발 시간표 .json 파일로 변환**
-2. ✅ **죽전역 ↔ 학교 거리 기준 평균 속도 계산**
-
-   * 간단 버전: 시간별 평균 속도 CSV 기록
-   * 심화 버전: Directions API 또는 거리-시간 검색
-3. ✅ **Flask + Leaflet 연동**
-4. ✅ **프론트엔드에서 Flask API 호출 및 ETA 표시**
-
----
-
-## 🔗 활용 오픈소스
-
-| 이름                      | 기능                       | 링크                                                              |
-| ----------------------- | ------------------------ | --------------------------------------------------------------- |
-| Flask-Leaflet Demo      | Flask + Leaflet 연동 구조 참고 | [GitHub](https://github.com/adwhit/flask-leaflet-demo)          |
+| 분야         | 기술 스택                                       |
+|--------------|------------------------------------------------|
+| 프론트엔드   | HTML, CSS, JavaScript, Leaflet.js              |
+| 백엔드       | Python, Flask                                  |
+| 외부 API     | NAVER Directions5 API, NAVER Geocode API       |
+| 지도 시각화  | OpenStreetMap, Leaflet.js                      |
 
 ---
 
-## 📁 파일 구조
+## 🧑‍💻 팀원 소개
+
+| 이름     | 역할             | 주요 업무                                      |
+|----------|------------------|-----------------------------------------------|
+| 안재민   | 팀장, 프론트엔드 | 지도 시각화, UI/UX 설계                       |
+| 엄도윤   | 백엔드           | ETA 계산 로직, API 서버 개발                  |
+| 지현구   | 문서화, 관리     | 프로젝트 기획서 작성, README 및 문서 관리     |
+
+---
+
+## 📂 프로젝트 구조
 
 ```
-ShuttleRun/
-├── backend/
-│   ├── app.py                 ← Flask 실행 코드
-│   └── requirements.txt       ← Flask, requests 등 의종성
-│
-├── frontend/
-│   ├── index.html             ← Leaflet 로딩 HTML
-│   ├── style.css              ← 기본 스타일
-│   └── script.js              ← JS 코드 (API 호출 등)
-│
-├── docs/
-│   └── 기획서.md              ← 역할 분단 및 환동 과정 정리
-│
-├── .gitignore                 ← __pycache__, .env 등 제외
-├── README.md                  ← 전체 설명서
-└── LICENSE                    ← MIT 등 선택
+OpenSourceSW_Team13/
+├── backend/                 # Flask 기반 백엔드 서버
+│   ├── app.py               # 메인 애플리케이션 파일
+│   └── utils.py             # ETA 계산 및 API 호출 유틸리티
+├── frontend/                # 프론트엔드 정적 파일
+│   ├── index.html           # 메인 페이지
+│   ├── styles.css           # 스타일시트
+│   └── script.js            # 프론트엔드 로직
+├── doc/                     # 문서 및 이미지 자료
+│   └── images/              # README에 사용된 이미지
+├── schedule.json            # 셔틀버스 출발 시간표
+└── README.md                # 프로젝트 설명서
 ```
 
+---
+
+## 🚀 실행 방법
+
+### 1. 저장소 클론
+
+```bash
+git clone https://github.com/NotJaem/OpenSourceSW_Team13.git
+cd OpenSourceSW_Team13
+```
+
+### 2. 가상 환경 설정 (선택 사항)
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows의 경우: venv\Scripts\activate
+```
+
+### 3. 필수 패키지 설치
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. 환경 변수 설정
+
+NAVER API를 사용하기 위해 아래 환경 변수를 설정해야 합니다.
+
+```bash
+export NAVER_CLIENT_ID=your_client_id
+export NAVER_CLIENT_SECRET=your_client_secret
+```
+
+Windows의 경우:
+
+```cmd
+set NAVER_CLIENT_ID=your_client_id
+set NAVER_CLIENT_SECRET=your_client_secret
+```
+
+### 5. 백엔드 서버 실행
+
+```bash
+cd backend
+python app.py
+```
+
+### 6. 프론트엔드 실행
+
+브라우저에서 `frontend/index.html` 파일을 열어 실행합니다.
+
+---
+
+## 📌 주의 사항
+
+- NAVER API의 사용량 제한에 유의하세요.
+- 실시간 교통 정보는 NAVER Directions5 API의 응답에 따라 달라질 수 있습니다.
+- 셔틀버스의 실제 도착 시간은 예측값과 차이가 있을 수 있습니다.
+
+---
+
+## 📄 라이선스
+
+이 프로젝트는 MIT 라이선스를 따릅니다. 자세한 내용은 [LICENSE](./LICENSE)를 참고하세요.
+
+---
+
+더 자세한 내용은 [프로젝트 저장소](https://github.com/NotJaem/OpenSourceSW_Team13)를 참고해주세요.
