@@ -7,8 +7,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-NAVER_CLIENT_ID = 'key'  # <-- NAVER API Client ID 입력
-NAVER_CLIENT_SECRET = 'key'  # <-- NAVER API Client Secret 입력
+NAVER_CLIENT_ID = 'x32e45dhiv'  # <-- NAVER API Client ID 입력
+NAVER_CLIENT_SECRET = 'WgPseVxDKg8NYjVcxdOFmOTtIzTnf98ffnIauAYu'  # <-- NAVER API Client Secret 입력
 
 # 도로명 주소 기반 지명
 ORIGIN_NAME = "경기도 용인시 수지구 죽전로 152"

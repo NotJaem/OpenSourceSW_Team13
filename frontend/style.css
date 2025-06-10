@@ -5,17 +5,9 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
-  background: #F2F2F2;
+  background: #f2f2f2;
   color: #222;
   overflow: hidden;
-}
-
-landing {
-  padding-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 #landing {
@@ -37,7 +29,6 @@ landing {
 .landing-left {
   text-align: left;
   flex: 1;
-
   margin-top: -50px;
 }
 
@@ -51,9 +42,9 @@ landing {
 #landing h1 {
   display: inline-block;
   font-size: 200px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   margin-top: -10px;
-  color: #177DFA;
+  color: #177dfa;
 }
 
 #landing h2 {
@@ -65,17 +56,14 @@ landing {
 
 .highlight {
   font-weight: bold;
-  color: #0D0D0D;
-  /* 원하는 색상으로 수정 가능 */
+  color: #0d0d0d;
 }
 
 #landing p {
   font-size: 20px;
   margin: 5px;
   color: #595959;
-  font-family: 'Pretendard Variable', sans-serif;
   font-weight: 500;
-  /* ⬅ Pretendard Medium에 해당 */
 }
 
 button {
@@ -84,7 +72,7 @@ button {
   font-weight: bold;
   margin: 25px 0;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
-  background-color: #187DFA;
+  background-color: #187dfa;
   color: white;
   border: none;
   border-radius: 30px;
@@ -101,13 +89,80 @@ button:active {
   background-color: #0d4bb3;
 }
 
-#landing input {
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #ddd;
+#time-setting {
+  padding: 50px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.time-container {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  align-items: stretch;
+  transform: translate(60px, -20px);
+}
+
+.time-left {
+  flex: none;
+  width: 360px;
+  padding: 30px;
+  text-align: left;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  min-height: 380px;
+}
+
+.time-left h2 {
+  font-size: 40px;
+  margin-bottom: 15px;
+  margin-top: 5px;
+  font-weight: 800;
+}
+
+.time-left p {
+  font-size: 18px;
+  color: #000000;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+#time-confirm-btn {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  margin-top: 135px;
+  margin-bottom: 10px;
+  padding: 10px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #187dfa;
+  color: white;
+  border: none;
   border-radius: 30px;
-  width: 300px;
-  margin-top: 10px;
+  cursor: pointer;
+}
+
+.time-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shared-logo {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  width: 500px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: translateY(-250px) translateX(-130px);
 }
 
 .scroll-time-picker {
@@ -125,16 +180,11 @@ button:active {
   top: 50%;
   transform: translateY(-50%);
   left: 23px;
-  /* 왼쪽 여백 */
   right: 23px;
-  /* 오른쪽 여백 */
   height: 40px;
-  /* 선택 항목 높이와 일치 */
   background: rgba(24, 125, 250, 0.1);
-  /* 연한 파란색 강조 */
   pointer-events: none;
   z-index: 1;
-  border-radius: 0;
 }
 
 .picker-column {
@@ -160,7 +210,6 @@ button:active {
   justify-content: center;
   font-size: 24px;
   height: 115px;
-  /* 다른 picker와 동일한 높이 */
   width: 30px;
 }
 
@@ -175,134 +224,22 @@ button:active {
   height: 40px;
 }
 
-#time-setting {
-  padding: 50px;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.time-container {
-  display: flex;
-  width: 80%;
-  justify-content: space-between;
-  align-items: stretch;
-
-  position: relative;
-  /* ✅ transform 쓰기 위해 필요 */
-  transform: translate(60px, -20px);
-}
-
-.time-left {
-  flex: none;
-  width: 360px;
-  /* ✅ 고정 너비로 줄이기 */
-  padding: 30px;
-  text-align: left;
-
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-
-  min-height: 380px;
-}
-
-.time-left h2 {
-  font-size: 40px;
-  margin-bottom: 15px;
-  margin-top: 5px;
-  font-weight: 800;
-}
-
-.time-left p {
-  font-size: 18px;
-  color: #000000;
-  margin-bottom: 20px;
-  line-height: 1.4;
-  font-weight: 500;
-}
-
-#arrival-time-picker {
-  padding: 10px;
-  font-size: 18px;
-  width: 200px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-}
-
-#time-confirm-btn {
-  display: block;
-  margin-left: auto;
-  /* ✅ 오른쪽 끝으로 밀어붙임 */
-  margin-right: 0;
-  margin-top: 135px;
-  margin-bottom: 10px;
-  padding: 10px 25px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #187DFA;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-}
-
-.time-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.custom-time-picker {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 20px;
-}
-
-.custom-time-picker select {
-  font-size: 16px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-family: 'Pretendard Variable', sans-serif;
-}
-
-.shared-logo {
-  position: absolute;
-  top: 50%;
-  right: 5%;
-  /* 또는 10% */
-  width: 500px;
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  transform: translateY(-250px) translateX(-130px);
-}
-
-footer {
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 16px;
-  font-weight: 500;
-  color: #747474;
-  text-align: center;
-  padding: 5px 10px;
-}
-
 #main-ui {
-  text-align: center;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh; /* ✅ 높이 보장 */
+  padding: 10vh 20px 60px 20px; /* ✅ 아래 공간 확보 */
+  box-sizing: border-box;       /* ✅ 내부 padding 계산 포함 */
+
 }
 
 #map {
   width: 100%;
   max-width: 700px;
-  height: 350px;
+  height: 400px;
   margin: 0 auto 20px;
   border-radius: 10px;
   overflow: hidden;
@@ -311,50 +248,40 @@ footer {
 .main-card {
   background-color: white;
   padding: 8px;
-  max-width: 720px;
+  width: 720px;
+  max-width: 90%;
   margin: 0 auto;
   border-radius: 30px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-#info-card {
-  background-color: white;
-  padding: 30px;
-  max-width: 600px;
-  margin: 0 auto;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.result-row {
+.arrival-flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 35px;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+
+#arrival-label {
   font-size: 20px;
-  margin-bottom: 15px;
+  font-weight: 500;
 }
 
-.result-label {
+.arrival-time-box {
+  font-size: 22px;
   font-weight: bold;
-}
-
-.result-time {
-  font-size: 30px;
-  font-weight: bold;
+  background-color: #187dfa;
   color: white;
-  background: #187DFA;
   padding: 8px 30px;
-  border-radius: 40px;
+  border-radius: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.progress-icon {
-  margin: 10px 0;
-}
-
-.progress-icon img {
-  height: 24px;
 }
 
 .progress-bar-container {
@@ -363,9 +290,7 @@ footer {
   height: 10px;
   background-color: #ddd;
   border-radius: 20px;
-  margin: 38px auto;
-  overflow: visible;
-  margin-top: 55px;
+  margin: 55px auto 38px auto;
 }
 
 .progress-wrapper {
@@ -378,13 +303,13 @@ footer {
   background: linear-gradient(to right, #a8ff78 0%, #78ffd6 100%);
   width: 0%;
   border-radius: 20px;
+
 }
 
 #bus-icon {
   position: absolute;
   top: -45px;
   width: 40px;
-  height: auto;
   transform: translateX(-20%);
   transition: left 0.3s ease;
 }
@@ -404,7 +329,7 @@ footer {
   font-weight: 400;
   margin-top: 1px;
   margin-bottom: 5px;
-  transform: translatey(-10%);
+  transform: translateY(-10%);
 }
 
 .eta-number {
@@ -412,31 +337,85 @@ footer {
   font-weight: 700;
 }
 
-.arrival-flex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 35px;
-  margin-top: 10px;
-  margin-bottom: 16px;
-}
-
-#arrival-container {
-  text-align: center;
-  margin-top: 10px;
-}
-
-#arrival-label {
-  font-size: 20px;
+footer {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
   font-weight: 500;
+  color: #747474;
+  text-align: center;
+  padding: 5px 10px;
 }
 
-.arrival-time-box {
-  font-size: 22px;
+#retry-btn {
+  padding: 10px 24px;
+  font-size: 16px;
   font-weight: bold;
-  background-color: #187dfa;
   color: white;
-  padding: 8px 30px;
-  border-radius: 30px;
+  background-color: #555;
+  border: none;
+  border-radius: 25px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 20px;
+}
+
+#retry-btn:hover {
+  background-color: #333;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+#retry-btn:active {
+  background-color: #222;
+}
+
+@media screen and (max-width: 1400px) {
+  #main-ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    height: auto;
+  }
+
+  .main-card {
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+    box-sizing: border-box;
+  }
+
+  #map {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+  }
+
+  .arrival-flex {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+    margin: 30px 0 20px 0;
+  }
+
+  #bus-icon,
+  .progress-percent {
+    top: -40px;
+    transform: translateX(-50%);
+  }
+
+  footer {
+    position: relative;
+    bottom: auto;
+    transform: none;
+    margin-top: 30px;
+  }
 }
